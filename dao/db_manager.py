@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 Base = declarative_base()
 class DbSession:
-    def get_db1(self) :
+    def get_db(self) :
         SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db" 
         engine = create_engine(   SQLALCHEMY_DATABASE_URL)
         SessionLocal=  sessionmaker(autocommit=False, autoflush=False, bind= engine )
