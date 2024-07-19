@@ -5,6 +5,7 @@ from controller.user_controller import UserController
 from entity.basemodel import UserBase,UserId
 from authentication.authentication import jwt_auth_required
 from utils.helpers import jwtBearer
+
 class CRUDUser:
     application=app = {}
 
@@ -56,7 +57,7 @@ class CRUDUser:
         return {"time":time.time()-start_time,"resuts":rtn}
     
     @jwt_auth_required
-    async def get_user_info(self, request: Request,token: str = Query(None, include_in_schema=True)):
+    async def get_user_info(self, request: Request,token: str = Query(None, include_in_schema=False)):
         try:
             start_time = time.time()
             # add logic for api processing here

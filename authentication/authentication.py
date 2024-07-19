@@ -4,6 +4,7 @@ import time
 import base64, json
 import requests
 from utils.helpers import HTTPStatus,validate_jwt
+import jwt
 def jwt_auth_required(f):
     @wraps(f)
     def authenticate( *args, **kwargs):
@@ -23,9 +24,16 @@ def jwt_auth_required(f):
             raise HTTPException(status_code=HTTPStatus.unauthorized.value[0], detail="Credentials not sent")
         #here we check in valid or not 
         if authtoken:
-            payload = validate_jwt(authtoken)
-            if "message" in payload:
-                raise HTTPException(status_code=HTTPStatus.unauthorized.value[0], detail="Credentials not sent")
+            try:
+                secret_key='your@secret@key'
+                algorithms=['HS256']
+                payload = jwt.decode(token, secret_key, algorithms=algorithms)
+                print(payload)
+                # return payload
+            except jwt.ExpiredSignatureError:
+                raise HTTPException(status_code=HTTPStatus.unauthorized.value[0], detail="Token has expired")
+            except jwt.InvalidTokenError:
+                raise HTTPException(status_code=HTTPStatus.unauthorized.value[0], detail="Invalid token")
 
         else:
             raise CustomException(status_code=HTTPStatus.unauthorized.value[0], status=HTTPStatus.unauthorized.value[1],
