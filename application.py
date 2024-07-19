@@ -22,8 +22,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(CRUDUser().app, tags=["CRUD OPERATION"])
-obj=DbSession()
-print("skdjfdsk",obj)
+# obj=DbSession()
+# print("skdjfdsk",obj)
 if __name__ == "__main__":
     uvicorn.run(
         app,

@@ -1,11 +1,29 @@
 from dao.db_manager import DbSession
 from models.model import User
 from sqlalchemy.orm import Session
-
+from utils.helpers import generate_jwt,HTTPStatus
 class UserController:
 
     def __init__(self) -> None:
         pass
+
+    def login_cred(self,params):
+        try:
+            id=params.dict().get('id')
+            with DbSession().get_db() as session:
+                user_obj= session.query(User).filter(User.id==id).first()
+                if user_obj is not None:
+                    payload={"userId":id,'email':user_obj.email}
+                    res=generate_jwt(payload)
+                    return {"token":res,'error':False}
+                else:
+                    return {"message":"User Not Found",'error':True}
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return {"message":f"something went wrong"+str(e),'error':True}
+
+
 
     def get_users(self):
   
